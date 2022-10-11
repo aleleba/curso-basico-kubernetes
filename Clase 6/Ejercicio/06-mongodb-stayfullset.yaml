@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb-node-app
+  namespace: node-app
+spec:
+  replicas: 1
+  serviceName: mongodb-node-app-svc
+  selector:
+    matchLabels:
+      app: mongodb-node-app
+  template:
+    metadata:
+      labels:
+        app: mongodb-node-app
+    spec:
+      containers:
+      - name: mongodb-node-app
+        image: mongo:5.0.12
+        imagePullPolicy: Always       
+        ports:
+        - containerPort: 27017
+        env:
+        - name: MONGO_DATA_DIR
+          value: /data/db
+        - name: MONGO_LOG_DIR
+          value: /dev/null
+        - name: MONGODB_USER
+          valueFrom:
+            secretKeyRef:
+              name: node-app-secret
+              key: USER_MONGO
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: node-app-secret
+              key: USER_MONGO
+        - name: MONGODB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: node-app-secret
+              key: PASSWORD_MONGO
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: node-app-secret
+              key: PASSWORD_MONGO
+        - name: MONGO_INITDB_DATABASE
+          value: admin

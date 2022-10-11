@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-app
+  namespace: node-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      com.docker.project: node-app
+  template:
+    metadata:
+        labels:
+          com.docker.project: node-app
+    spec:
+      containers:
+        - name: node-app
+          image: aleleba/example-app:2.0.1
+          imagePullPolicy: Always
+          env:
+          - name: PORT
+            valueFrom:
+              configMapKeyRef:
+                name: node-app-configmap
+                key: PORT
+          - name: WHITELIST_URLS
+            valueFrom:
+              configMapKeyRef:
+                name: node-app-configmap
+                key: WHITELIST_URLS      
+          - name: HOST_MONGO
+            valueFrom:
+              configMapKeyRef:
+                name: node-app-configmap
+                key: HOST_MONGO       
+          - name: PORT_MONGO
+            valueFrom:
+              configMapKeyRef:
+                name: node-app-configmap
+                key: PORT_MONGO        
+          - name: DB_MONGO
+            valueFrom:
+              configMapKeyRef:
+                name: node-app-configmap
+                key: DB_MONGO
+          - name: USER_MONGO
+            valueFrom:
+              secretKeyRef:
+                name: node-app-secret
+                key: USER_MONGO
+          - name: PASSWORD_MONGO
+            valueFrom:
+              secretKeyRef:
+                name: node-app-secret
+                key: PASSWORD_MONGO    
+          ports:
+            - containerPort: 80
+              protocol: TCP

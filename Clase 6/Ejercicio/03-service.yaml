@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-service
+  namespace: node-app
+spec:
+  ports:
+      - name: 80-tcp
+        port: 80
+        protocol: TCP
+        targetPort: 4000
+  selector:
+    com.docker.project: node-app
+  type: LoadBalancer
+status:
+  loadBalancer: {}

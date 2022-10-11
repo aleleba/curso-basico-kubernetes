@@ -1,0 +1,24 @@
+module.exports = `
+
+  """Producto Query"""
+  type Producto {
+    id: ID
+    nombre: String
+  }
+
+  type InsertProductoRes {
+    producto: Producto
+    mensaje: String
+  }
+
+  input ProductoInput{
+    nombre: String
+  }
+
+  """Esta es la Data de LogIn, Si los datos no son correctos devuelve el usuario Null y la conexion en False"""
+  type ProductosMutation {
+    insertProducto(producto: ProductoInput): InsertProductoRes
+    deleteProducto(id: ID): String
+  }
+  
+`

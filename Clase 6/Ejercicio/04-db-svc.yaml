@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: mongodb-node-app-svc
+  namespace: node-app
+spec:
+  selector:
+    app: mongodb-node-app
+  ports:
+  - protocol: TCP
+    name: mongodb-node-app
+    port: 27017
+    targetPort: 27017

@@ -1,0 +1,3 @@
+#Quitar Node Modules
+/node_modules
+.env
