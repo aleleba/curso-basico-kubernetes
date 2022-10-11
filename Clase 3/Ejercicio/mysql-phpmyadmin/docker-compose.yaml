@@ -1,0 +1,28 @@
+version: '3.3'
+services:
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - my-db:/var/lib/mysql
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    environment:
+      PMA_HOSTS: db
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - '8080:80'
+    expose:
+      - '80'
+    depends_on:
+      - db
+volumes:
+  my-db:
+    external: false #if true will try to find a folder that you set
