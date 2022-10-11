@@ -6,6 +6,7 @@
 ![Diap5](./img/Diap5.png)
 ![Diap6](./img/Diap6.png)
 ![Diap7](./img/Diap7.png)
+![Diap8](./img/Diap8.png)
 
 ### Ejercicio:
 Correr Comandos:
@@ -16,4 +17,4 @@ Correr Comandos:
 
 `docker run --name phpmyadmin --network mysql-net -e PMA_HOST=db -e MYSQL_ROOT_PASSWORD=password -e PMA_PORT=3306 -d -p 8080:80 phpmyadmin/phpmyadmin`
 
-![Diap8](../img/Agradecimiento.png)
+![Diap9](../img/Agradecimiento.png)
