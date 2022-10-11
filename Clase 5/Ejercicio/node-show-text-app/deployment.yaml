@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-app
+  namespace: node-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-app
+  template:
+    metadata:
+        labels:
+          app: node-app
+    spec:
+      containers:
+        - name: node-app
+          image: ubuntu
+          command:
+            - "/bin/sh"
+            - "-c"
+            - "tail -f /dev/null"
+          env:
+          - name: PORT
+            value: "3000"
+          - name: SECRET
+            valueFrom:
+              secretKeyRef:
+                name: node-app-secret
+                key: secret
+          - name: MESSAGE
+            valueFrom:
+              configMapKeyRef:
+                name: node-app-configmap
+                key: message
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 3000
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - "/bin/sh"
+                  - "-c"
+                  - "apt-get update"
+                  - "&&"
+                  - "apt-get install curl -y"
+                  - "&&"
+                  - "curl -sL https://deb.nodesource.com/setup_16.x -o nodesource_setup.sh"
+                  - "&&"
+                  - "bash nodesource_setup.sh"
+                  - "&&"
+                  - "apt install nodejs"
+                  - "&&"
+                  - "cd /app && npm install && node app.js"
+          volumeMounts:
+            - name: app-files
+              mountPath: /app/app.js
+              subPath: app.js
+            - name: app-files
+              mountPath: /app/package.json
+              subPath: package.json
+      volumes:
+      - name: app-files
+        configMap:
+          name: node-app-configmap
