@@ -7,19 +7,21 @@ spec:
   replicas: 1
   selector:
     matchLabels:
+      com.docker.project: node-app
       app: node-app
   template:
     metadata:
         labels:
+          com.docker.project: node-app
           app: node-app
     spec:
       containers:
         - name: node-app
-          image: ubuntu
+          image: node
           command:
             - "/bin/sh"
             - "-c"
-            - "tail -f /dev/null"
+            - "cd /app && npm install && node app.js"
           env:
           - name: PORT
             value: "3000"
@@ -39,23 +41,7 @@ spec:
               cpu: "500m"
           ports:
             - containerPort: 3000
-          lifecycle:
-            postStart:
-              exec:
-                command:
-                  - "/bin/sh"
-                  - "-c"
-                  - "apt-get update"
-                  - "&&"
-                  - "apt-get install curl -y"
-                  - "&&"
-                  - "curl -sL https://deb.nodesource.com/setup_16.x -o nodesource_setup.sh"
-                  - "&&"
-                  - "bash nodesource_setup.sh"
-                  - "&&"
-                  - "apt install nodejs"
-                  - "&&"
-                  - "cd /app && npm install && node app.js"
+              protocol: TCP
           volumeMounts:
             - name: app-files
               mountPath: /app/app.js
